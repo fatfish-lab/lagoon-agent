@@ -1,0 +1,8 @@
+.env
+.DS_Store
+.vscode/launch.json
+
+lagoon-agent-linux
+lagoon-agent-macos
+lagoon-agent-macos-intel
+lagoon-agent-windows.exe
