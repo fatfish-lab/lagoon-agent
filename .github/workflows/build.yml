@@ -43,6 +43,6 @@ jobs:
             lagoon-agent-linux.tar.gz
             lagoon-agent-macos.tar.gz
             lagoon-agent-macos-intel.tar.gz
-            lagoon-agent-windows.exe.tar.gz
+            lagoon-agent-windows.tar.gz
           tag_name: ${{ env.VERSION }}
           generate_release_notes: true
