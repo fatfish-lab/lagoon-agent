@@ -1,0 +1,48 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+# This workflow will install Deno then run `deno lint` and `deno test`.
+# For more information see: https://github.com/denoland/setup-deno
+
+name: Lagoon agent build
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Setup repo
+        uses: actions/checkout@v3
+
+      - run: git fetch --prune --unshallow --tags
+      - run: git describe --tags --abbrev=0 > VERSION
+      - run: echo "VERSION=$(cat VERSION)" >> $GITHUB_ENV
+
+      - name: Setup Deno
+        uses: denoland/setup-deno@v1
+        with:
+          deno-version: "1.38.5"
+
+      - name: Build
+        run: |
+          deno task build
+          tar -czf lagoon-agent-linux.tar.gz lagoon-agent-linux
+          tar -czf lagoon-agent-macos.tar.gz lagoon-agent-macos
+          tar -czf lagoon-agent-macos-intel.tar.gz lagoon-agent-macos-intel
+          tar -czf lagoon-agent-windows.tar.gz lagoon-agent-windows.exe
+
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            lagoon-agent-linux.tar.gz
+            lagoon-agent-macos.tar.gz
+            lagoon-agent-macos-intel.tar.gz
+            lagoon-agent-windows.exe.tar.gz
+          tag_name: ${{ env.VERSION }}
+          generate_release_notes: true
