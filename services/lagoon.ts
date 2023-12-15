@@ -1,5 +1,4 @@
 import Aquarium from "https://raw.githubusercontent.com/fatfish-lab/aquarium-ts-api/main/src/index.ts"
-// import Aquarium from "/Users/yann/git/aquarium-ts-api/src/index.ts"
 export default class Lagoon {
   Aqua: any
   hardware: string|void
@@ -10,7 +9,7 @@ export default class Lagoon {
   }
 
   public static async login(hardware: string | undefined = Deno.env.get('LAGOON_HARDWARE_KEY')): Promise<Lagoon> {
-    const url = Deno.env.get('LAGOON_URL') || Deno.env.get('') ? 'http://localhost:8000' : undefined
+    const url = Deno.env.get('LAGOON_URL') ? 'http://localhost:8000' : undefined
     const domain = Deno.env.get('LAGOON_DOMAIN')
     const token = Deno.env.get('LAGOON_TOKEN')
     if (url) {
@@ -71,7 +70,7 @@ export default class Lagoon {
   }
 
   trashHardware(itemKey:string|number): Promise<any> {
-    return this.Aqua.delete(`items/${itemKey}/trash`)
+    return this.Aqua.delete(`items/${itemKey}/trash`, {})
   }
 
   findHardware(hostname: string): Promise<Array<any>> {

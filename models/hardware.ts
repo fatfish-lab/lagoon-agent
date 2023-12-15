@@ -67,7 +67,8 @@ export class Hardware {
       networkInterfaces,
       uptime,
       memory,
-      syncedAt: new Date().toISOString()
+      syncedAt: new Date().toISOString(),
+      withAgent: true
     }
   }
 
@@ -136,17 +137,17 @@ export class Hardware {
     })
   }
 
-  async delete(): Promise<void> {
-    if (this._key) {
-      await this.unlink()
-    }
-
+  async trash(): Promise<void> {
     const hardware = await this.get().catch((e) => {
-      console.log(e)
+      throw e
     })
     if (hardware) {
       const lagoon = await Lagoon.login()
-      lagoon.trashHardware(hardware._key)
+      return lagoon.trashHardware(hardware._key)
+    }
+
+    if (this._key) {
+      await this.unlink()
     }
   }
 
