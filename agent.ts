@@ -49,7 +49,16 @@ await new Command()
           const variables = configuration.split('\n')
           variables.forEach(variable => {
             const [env, val] = variable.split('=')
-            Deno.env.set(env, val)
+
+            switch (env) {
+              case 'LAGOON_HARDWARE_KEY':
+                if (!('location' in options)) Deno.env.set(env, val)
+                break;
+
+              default:
+                Deno.env.set(env, val)
+                break;
+            }
           })
         }
       } else {
